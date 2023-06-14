@@ -3,25 +3,126 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+  <style>
+    .table-container {
+      max-height: 200px; /* Batasan tinggi kontainer tabel */
+      overflow-y: auto; /* Mengaktifkan scrolling pada kontainer tabel */
+      position: relative; /* Menetapkan posisi relatif pada kontainer */
+    }
+
+    .scroll-bottom {
+      position: absolute; /* Menetapkan posisi absolut pada elemen */
+      bottom: 0; /* Menempatkan elemen pada bagian bawah */
+      width: 100%; /* Lebar elemen mengikuti lebar parent */
+      height: 10px; /* Tinggi elemen scroll bar */
+      background-color: rgba(0, 0, 0, 0.3); /* Warna latar belakang elemen scroll bar */
+    }
+  </style>
 </head>
+
 <body>
     <div class="container">
         <div class="text-center bg-success p-3 text-white"><h1>GENERATOR SIFAT</h1></div>
-        <table class="table">
-            <tr>
-                <th>Nama</th>
-                <th>Sifat</th>
-            </tr>
-            <tr id="inputRow">
-                <td>
-                    <input type="text" id="namaInput" onkeydown="checkEnter(event)">
-                </td>
-                <td></td>
-            </tr>
-        </table>
+        <div class="table-container"> <!-- Ubah div menjadi div dengan class "table-container" -->
+          <table class="table">
+              <tr>
+                  <th>Nama</th>
+                  <th>Sifat</th>
+              </tr>
+              <tr id="inputRow">
+                  <td>
+                      <input type="text" id="namaInput" onkeydown="checkEnter(event)">
+                  </td>
+                  <td></td>
+              </tr>
+          </table>
+          <!-- <div class="scroll-bottom"></div> Tambahkan elemen scroll-bottom -->
+        </div>
     </div>
 
+    
+
     <script>
+        function generateTrait() {
+          var sifatList = [
+          "baik", "dermawan", "ramah", "jujur", "membantu", "peduli", "egois", "kasar", "tidak jujur", "keras kepala",
+                "percaya diri", "sopan", "teliti", "ceria", "optimis", "disiplin", "santai", "kreatif", "rajin", "bijaksana",
+                "penyabar", "tenang", "intelek", "murah hati", "tegas", "sederhana", "antusias", "enerjik", "pemurung", "egois",
+                "pelupa", "tergesa-gesa", "pendiam", "cepat marah", "sombong", "malas", "berisik", "pesimis", "lupa janji", "penakut",
+                "manja", "mementingkan diri sendiri", "cerewet", "pemalas", "pendendam", "cengeng", "tak sabar", "pesimis", "gampang tersinggung",
+                "culas", "sulit diajak kerja sama", "cemburuan", "tak mau mengalah", "ceroboh", "kaku", "materialistis", "pemarah", "penyendiri",
+                "berpikiran sempit", "mudah bosan", "tak bertanggung jawab", "penipu", "mengeluh", "pandangan negatif", "memilih-milih", "pendendam", "manipulatif",
+                "berlebihan", "tidak empati", "ketus", "tak punya rasa humor", "tak peduli", "pendiam", "suka mengkritik", "cemas", "manja", "lemah lembut",
+                "suka mengeluh", "kurang sabar", "tergesa-gesa", "tak bisa diandalkan", "tak mau bekerja sama", "banyak alasan", "sulit memaafkan", "tak bertoleransi",
+                "tak percaya diri", "tidak tegas", "manja", "terlalu cerewet", "tidak perhatian", "selalu ragu", "lebih suka sendiri", "sulit menerima kritik", "pesimis"
+          ];
+  
+          var inputRow = document.getElementById("inputRow");
+          var namaInput = document.getElementById("namaInput");
+  
+          if (namaInput.value.trim() !== "") {
+              var newRow = document.createElement("tr");
+  
+              var namaCell = document.createElement("td");
+              var namaText = document.createTextNode(namaInput.value);
+              namaCell.appendChild(namaText);
+              newRow.appendChild(namaCell);
+  
+              var sifatCell = document.createElement("td");
+              var sifatText = generateMultipleTraits(sifatList);
+              sifatCell.appendChild(sifatText);
+              newRow.appendChild(sifatCell);
+  
+              inputRow.parentNode.insertBefore(newRow, inputRow);
+  
+              namaInput.value = "";
+              namaInput.focus();
+  
+              keepScrollBarBottom(); // Panggil fungsi untuk menjaga scroll bar tetap di bagian bawah
+          }
+        }
+  
+        function generateMultipleTraits(sifatList) {
+            var randomSifatCount = Math.floor(Math.random() * 4) + 1; // Generates 1 to 4 traits randomly
+    var randomSifat = [];
+
+    for (var i = 0; i < randomSifatCount; i++) {
+        var traitIndex = Math.floor(Math.random() * sifatList.length);
+        randomSifat.push(sifatList[traitIndex]);
+        sifatList.splice(traitIndex, 1); // Remove the selected trait from the list to avoid repetition
+    }
+
+    var sifatText = document.createTextNode(randomSifat.join(", "));
+    return sifatText;
+        }
+  
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                generateTrait();
+                event.preventDefault();
+            }
+        }
+  
+        // Fungsi untuk menjaga scroll bar di bagian bawah
+        function keepScrollBarBottom() {
+          var tableContainer = document.querySelector('.table-container');
+          tableContainer.scrollTop = tableContainer.scrollHeight; // Set scroll top ke nilai maksimum
+        }
+  
+        // Panggil fungsi keepScrollBarBottom() saat halaman selesai dimuat
+        window.onload = function() {
+          keepScrollBarBottom();
+        };
+      </script>
+      <br><br><br><br><br><br><br><br>
+        <footer>
+          <p>&copy; 2023 Nama Perusahaan. All rights reserved.</p>
+        </footer>
+  </body>
+  </html>
+
+    <!-- <script>
   function generateTrait() {
     var sifatList = [
                 "baik", "dermawan", "ramah", "jujur", "membantu", "peduli", "egois", "kasar", "tidak jujur", "keras kepala",
@@ -81,5 +182,12 @@ function generateMultipleTraits(sifatList) {
             }
         }
     </script>
+    <br><br><br><br><br><br><br><br>
+      <footer>
+        <p>&copy; 2023 Nama Perusahaan. All rights reserved.</p>
+      </footer>
 </body>
-</html>
+</html> -->
+
+
+
